@@ -36,5 +36,12 @@ class TestNoteClass(unittest.TestCase):
     self.assertEqual(n.note, note.N_A_FLAT)
     self.assertEqual(n.octave, 2)
 
+  def test_copy(self):
+    a = note.Note(note.N_D_FLAT)
+    b = a.copy()
+    self.assertEqual(a.note, b.note)
+    self.assertEqual(a.octave, b.octave)
+    self.assertNotEqual(a, b)
+
 if __name__ == "__main__":
   unittest.main()
