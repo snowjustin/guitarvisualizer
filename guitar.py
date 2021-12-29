@@ -38,6 +38,7 @@ class Guitar:
       self.strings[k] = notes
 
   def change_string_tuning(self, string_pos, semitones, tuning_direction):
+    """This function allows you to change the tuning of one string of the guitar."""
     assert(tuning_direction not in [TUNE_UP, TUNE_DOWN], "Invalid parameter for tuning_direction")
     assert(string_pos not in [STRING_1, STRING_2, STRING_3, STRING_4, STRING_5, STRING_6], "Invalid parameter for string_pos")
     assert(isinstance(semitones, int), "Invalid parameter for semitones")
