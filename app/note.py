@@ -15,18 +15,18 @@ N_F = "F"
 N_G_FLAT = N_F_SHARP = "F#/Gb"
 N_G = "G"
 N_A_FLAT = N_G_SHARP = "G#/Ab"
-NOTES = [N_A, N_A_SHARP, N_B, N_C, N_C_SHARP, N_D,  N_D_SHARP, N_E, N_F, N_F_SHARP, N_G, N_G_SHARP]
+NOTES = [N_C, N_C_SHARP, N_D,  N_D_SHARP, N_E, N_F, N_F_SHARP, N_G, N_G_SHARP, N_A, N_A_SHARP, N_B]
 
 
 class Note:
-  def __init__(self, note, octave=1):
+  def __init__(self, note=N_C, octave=4):
     self.note = note
     self.octave = octave
 
     
   def increment(self, n_semitones):
     if n_semitones:
-      if self.note == N_G_SHARP:
+      if self.note == N_B:
         self.note = NOTES[0]
         self.octave += 1
       else:
@@ -36,7 +36,7 @@ class Note:
 
   def decrement(self, n_semitones):
     if n_semitones:
-      if self.note == N_A:
+      if self.note == N_C:
         self.note = NOTES[len(NOTES) - 1]
         self.octave -= 1
       else:
