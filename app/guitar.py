@@ -1,4 +1,4 @@
-import note
+import app.note as note
 
 # Guitar Constants
 STRING_1 = 1
