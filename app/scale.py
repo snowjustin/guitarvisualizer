@@ -71,7 +71,7 @@ class Scale:
   def initialize(self, name, tonic):
     if name not in SUPPORTED_SCALES.keys():
       raise InvalidScaleNameException
-    elif type(tonic) != note.Note:
+    elif not isinstance(tonic, note.Note):
       raise InvalidNoteException
 
     self.name = name
@@ -85,19 +85,11 @@ class Scale:
 
 
 class InvalidScaleNameException(Exception):
-  def __init__(self):
-    pass
-
-
   def __str__(self):
     return "Scale objects must use a supported scale from scale.SUPPORTED_SCALES"
 
 
 
 class InvalidNoteException(Exception):
-  def __init__(self):
-    pass
-
-
   def __str__(self):
     return "Scale objects require a Note object to be passed as the tonic note of the scale."
