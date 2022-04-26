@@ -47,6 +47,15 @@ SUPPORTED_SCALES = {
   WHOLE: WHOLE_TONE
 }
 
+# Degrees - these will only work with 7 note scales.
+TONIC = DO = 1
+SUPERTONIC = RE = 2 
+MEDIANT = MI = 3
+SUBDOMINANT = FA = 4
+DOMINANT = SOL = 5
+SUBMEDIANT = LA = 6
+LEADINGTONE = TI = 7
+
 
 
 class Scale:
@@ -82,6 +91,19 @@ class Scale:
       next_note.increment(interval)
       self.scale.append(next_note)
 
+  def notecount(self):
+    return len(self.scale)
+
+
+  def getdegree(self, degree):
+    if isinstance(degree, int):
+      if degree > 0 and degree < 8:
+        return self.scale[degree - 1]
+      elif degree >= 8:
+        return self.scale[(degree % 7) - 1]
+    else:
+      raise InvalidDegreeException
+
 
 
 class InvalidScaleNameException(Exception):
@@ -93,3 +115,9 @@ class InvalidScaleNameException(Exception):
 class InvalidNoteException(Exception):
   def __str__(self):
     return "Scale objects require a Note object to be passed as the tonic note of the scale."
+
+
+
+class InvalidDegreeException(Exception):
+  def __str__(self):
+    return "The parameter degree must be of type int."

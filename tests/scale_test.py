@@ -27,5 +27,22 @@ class TestScaleClass(unittest.TestCase):
     self.assertEqual(s.scale[7].note, note.N_C)
     self.assertEqual(s.scale[7].octave, 5)
 
+  def test_notecount(self):
+    s = scale.Scale(scale.MAJOR, note.Note())
+    self.assertEqual(s.notecount(), 8)
+
+  def test_getdegree(self):
+    # These test's will only ever work with 7 note scales.
+    s = scale.Scale(scale.MAJOR, note.Note())
+    self.assertEqual(s.getdegree(scale.TONIC).note, note.N_C)
+    self.assertEqual(s.getdegree(scale.SUPERTONIC).note, note.N_D)
+    self.assertEqual(s.getdegree(scale.MEDIANT).note, note.N_E)
+    self.assertEqual(s.getdegree(scale.SUBDOMINANT).note, note.N_F)
+    self.assertEqual(s.getdegree(scale.DOMINANT).note, note.N_G)
+    self.assertEqual(s.getdegree(scale.SUBMEDIANT).note, note.N_A)
+    self.assertEqual(s.getdegree(scale.LEADINGTONE).note, note.N_B)
+    self.assertEqual(s.getdegree(8).note, note.N_C)
+    self.assertEqual(s.getdegree(9).note, note.N_D)
+
 if __name__ == "__main__":
   unittest.main()
