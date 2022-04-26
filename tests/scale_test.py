@@ -43,6 +43,7 @@ class TestScaleClass(unittest.TestCase):
     self.assertEqual(s.getdegree(scale.LEADINGTONE).note, note.N_B)
     self.assertEqual(s.getdegree(8).note, note.N_C)
     self.assertEqual(s.getdegree(9).note, note.N_D)
+    self.assertRaises(scale.InvalidDegreeException, s.getdegree, 'garbage data')
 
 if __name__ == "__main__":
   unittest.main()
