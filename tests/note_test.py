@@ -1,18 +1,22 @@
 import unittest
 import app.note as note
 
+# When used frequencies were pulled from https://pages.mtu.edu/~suits/notefreqs.html as a resource
 
 
 class TestNoteClass(unittest.TestCase):
   def test_init(self):
     # Test default parameter
-    n = note.Note(note.N_A)
-    self.assertEqual(n.note, note.N_A)
+    n = note.Note()
+    self.assertEqual(n.note, note.N_C)
     self.assertEqual(n.octave, 4)
+    self.assertEqual(n.frequency, 261.63)
 
     # Test passed octave
     n = note.Note(note.N_B, 2)
+    self.assertEqual(n.note, note.N_B)
     self.assertEqual(n.octave, 2)
+    self.assertEqual(n.frequency, 123.47)
 
   def test_increment(self):
     n = note.Note(note.N_C, 2)

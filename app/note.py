@@ -1,6 +1,10 @@
+import math
+
 ## Note Constants
 SEMITONE = 1
 TONE = 2
+
+A4Hz = 440  # hertz
 
 # Notes
 N_A = "A"
@@ -22,8 +26,16 @@ class Note:
   def __init__(self, note=N_C, octave=4):
     self.note = note
     self.octave = octave
+    self.frequency = self.__calculatefrequency__()
+  
 
-    
+  def __calculatefrequency__(self):
+    distance = (self.octave - 4) * 12
+    local_distance = NOTES.index(self.note) - NOTES.index(N_A)
+    distance += local_distance
+    return round(math.pow(2, distance / 12) * A4Hz, 2)    
+  
+  
   def increment(self, n_semitones):
     if n_semitones:
       if self.note == N_B:
@@ -32,6 +44,7 @@ class Note:
       else:
         self.note = NOTES[NOTES.index(self.note) + 1]
       self.increment(n_semitones - 1)
+      self.__calculatefrequency__()
       
 
   def decrement(self, n_semitones):
@@ -42,6 +55,7 @@ class Note:
       else:
         self.note = NOTES[NOTES.index(self.note) - 1]
       self.decrement(n_semitones - 1)
+      self.__calculatefrequency__()
       
 
   def copy(self):
