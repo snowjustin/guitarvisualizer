@@ -12,7 +12,7 @@ class Chord:
           raise TypeError("Chord objects only accept Note objects for initialization.")
 
       self.root = rootnote
-      # Notes will be put in the list based on their 
-      self.notes = []
+      self.notes = [rootnote]
       for n in notes:
         self.notes.append(n)
+      self.notes.sort(key=lambda n: n.frequency)
