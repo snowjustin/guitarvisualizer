@@ -5,7 +5,7 @@ import app.note as note
 class TestScaleClass(unittest.TestCase):
   def test_init(self):
     tonic = note.Note()
-    self.assertRaises(scale.InvalidNoteException, scale.Scale, scale.AEOLIAN, 'garbage data')
+    self.assertRaises(TypeError, scale.Scale, scale.AEOLIAN, 'garbage data')
     self.assertRaises(scale.InvalidScaleNameException, scale.Scale, 'garbage data', tonic)
     
     s = scale.Scale(scale.MAJOR, tonic)
@@ -43,7 +43,7 @@ class TestScaleClass(unittest.TestCase):
     self.assertEqual(s.getdegree(scale.LEADINGTONE).note, note.N_B)
     self.assertEqual(s.getdegree(8).note, note.N_C)
     self.assertEqual(s.getdegree(9).note, note.N_D)
-    self.assertRaises(scale.InvalidDegreeException, s.getdegree, 'garbage data')
+    self.assertRaises(TypeError, s.getdegree, 'garbage data')
 
 if __name__ == "__main__":
   unittest.main()

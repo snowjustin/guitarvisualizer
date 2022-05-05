@@ -44,7 +44,7 @@ class Guitar:
     elif string_pos not in [STRING_1, STRING_2, STRING_3, STRING_4, STRING_5, STRING_6]:
       raise(InvalidStringPositionException)
     elif not isinstance(semitones, int):
-      raise(InvalidSemitoneException)
+      raise(TypeError('invalid data type for int'))
 
     for n in self.strings[string_pos]:
       if tuning_direction == TUNE_UP:
@@ -56,16 +56,10 @@ class Guitar:
 
 class InvalidTunigException(Exception):
   def __str__(self):
-    return('invalid value for tuning')
+    return('invalid value for tuning, must be either value TUNE_UP or TUNE_DOWN')
 
 
 
 class InvalidStringPositionException(Exception):
   def __str__(self):
     return('invalid value for string position')
-
-
-
-class InvalidSemitoneException(Exception):
-  def __str__(self):
-    return('invalid data type for int')

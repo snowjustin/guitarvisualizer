@@ -6,6 +6,10 @@ import app.note as note
 
 class TestNoteClass(unittest.TestCase):
   def test_init(self):
+    # Test thrown exceptions
+    self.assertRaises(note.InvalidNoteException, note.Note, 'garbage data', 2)
+    self.assertRaises(TypeError, note.Note, note.N_A, 'garbage data')
+
     # Test default parameter
     n = note.Note()
     self.assertEqual(n.note, note.N_C)

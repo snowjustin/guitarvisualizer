@@ -24,6 +24,11 @@ NOTES = [N_C, N_C_SHARP, N_D,  N_D_SHARP, N_E, N_F, N_F_SHARP, N_G, N_G_SHARP, N
 
 class Note:
   def __init__(self, note=N_C, octave=4):
+    if note not in NOTES:
+      raise InvalidNoteException
+    if not isinstance(octave, int):
+      raise TypeError("Parameter octave must be of type int")
+
     self.note = note
     self.octave = octave
     self.frequency = self.__calculatefrequency__()
@@ -60,3 +65,9 @@ class Note:
 
   def copy(self):
     return Note(self.note, self.octave)
+
+
+
+class InvalidNoteException(Exception):
+  def __str__(self):
+    return "Given note is not contained within the note.NOTE list."

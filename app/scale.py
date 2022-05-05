@@ -81,7 +81,7 @@ class Scale:
     if name not in SUPPORTED_SCALES.keys():
       raise InvalidScaleNameException
     elif not isinstance(tonic, note.Note):
-      raise InvalidNoteException
+      raise TypeError("Scale objects require a Note object to be passed as the tonic note of the scale.")
 
     self.name = name
     self.tonic = tonic.copy()
@@ -101,23 +101,13 @@ class Scale:
         return self.scale[degree - 1]
       elif degree >= 8:
         return self.scale[(degree % 7) - 1]
+      else:
+        return TypeError("The parameter degree must be postitive and of type int.")
     else:
-      raise InvalidDegreeException
+      raise TypeError("The parameter degree must be postitive and of type int.")
 
 
 
 class InvalidScaleNameException(Exception):
   def __str__(self):
     return "Scale objects must use a supported scale from scale.SUPPORTED_SCALES"
-
-
-
-class InvalidNoteException(Exception):
-  def __str__(self):
-    return "Scale objects require a Note object to be passed as the tonic note of the scale."
-
-
-
-class InvalidDegreeException(Exception):
-  def __str__(self):
-    return "The parameter degree must be of type int."
