@@ -32,7 +32,26 @@ class App:
 
   def render(self):
     self.window.fill((0,0,0))
-    pygame.draw.rect(self.window, (0,0,255), (10, 20, 200, 200))
+    # Draw frets
+    space_between = 50
+    fret_width = 5
+    position = 50
+    frets = 0
+    while frets < 13:
+      pygame.draw.rect(self.window, (90, 39, 41), (position, 0, fret_width, SCREEN_HEIGHT))
+      position += fret_width + space_between 
+      frets += 1
+
+    # Draw strings
+    space_between = 40
+    string_width = 5 # actually passed as height
+    position = 40
+    strings = 0
+    while strings < 6:
+      pygame.draw.rect(self.window, (200, 200, 200), (0, position, SCREEN_WIDTH, string_width))
+      position += string_width + space_between
+      strings += 1
+
     pygame.display.update()
 
 
