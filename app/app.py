@@ -4,6 +4,8 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 320
 FRAME_RATE = 60
 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 
 class App:
@@ -31,27 +33,37 @@ class App:
 
 
   def render(self):
-    self.window.fill((0,0,0))
-    # Draw frets
-    space_between = 50
-    fret_width = 5
-    position = 50
-    frets = 0
-    while frets < 13:
-      pygame.draw.rect(self.window, (90, 39, 41), (position, 0, fret_width, SCREEN_HEIGHT))
-      position += fret_width + space_between 
-      frets += 1
+    self.window.fill(WHITE)
 
+    # Setup the fretboard
+    width = SCREEN_WIDTH - 40
+    height = SCREEN_HEIGHT - 40
+    string_width = 2
+    self.fretboard = pygame.Surface((width, height - 40))
+    self.fretboard.fill(WHITE)
+    
     # Draw strings
-    space_between = 40
-    string_width = 5 # actually passed as height
-    position = 40
+    space_between = height // 6
+    position = 0
     strings = 0
     while strings < 6:
-      pygame.draw.rect(self.window, (200, 200, 200), (0, position, SCREEN_WIDTH, string_width))
-      position += string_width + space_between
+      ref_rect = pygame.draw.rect(self.fretboard, BLACK, (0, position, (width // 12) * 12, string_width))
+      position += space_between
       strings += 1
 
+    # Draw frets
+    space_between = width // 12
+    position = 0
+    frets = 0
+    pygame.draw.rect(self.fretboard, BLACK, (position, 0, string_width * 2, ref_rect.bottom))
+    position += space_between
+    while frets < 12:
+      pygame.draw.rect(self.fretboard, BLACK, (position, 0, string_width, ref_rect.bottom))
+      position += space_between
+      frets += 1
+
+    # Draw notes
+    self.window.blit(self.fretboard, (20,20))
     pygame.display.update()
 
 
