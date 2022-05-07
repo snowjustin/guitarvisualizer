@@ -1,5 +1,6 @@
 import pygame
 import lib.guitar as guitar
+import pathlib
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 320
@@ -8,15 +9,19 @@ FRAME_RATE = 60
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (125, 125, 125)
+NOTE_COLOR = (25, 255, 25)
 
+FONT_PATH = pathlib.Path('font/Share-Regular.ttf')
 
-class MainApp:
+class App:
   def __init__(self):
     pygame.init()
     self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Guitar Visualizer")
     self.clock = pygame.time.Clock()
     self.running = True
+    self.state = AppState()
+    self.notefont = pygame.font.Font(FONT_PATH, 24)
 
 
   def process_input(self):
@@ -41,13 +46,13 @@ class MainApp:
     x_origin, y_origin = 30, 30
     width = SCREEN_WIDTH - 40
     height = SCREEN_HEIGHT - 40
-    max_frets = 12
-    max_strings = 6
+    max_frets = self.state.guitar.get_number_of_frets()
+    max_strings = len(self.state.guitar.strings)
     self.fretboard = pygame.Surface((width, height - 40))
     self.fretboard.fill(WHITE)
     
     # Draw strings
-    space_between = height // 6
+    space_between = height // max_strings
     position = 0
     strings = 0
     string_width = fret_width = 2
@@ -58,7 +63,7 @@ class MainApp:
       strings += 1
 
     # Draw frets
-    space_between = width // 12
+    space_between = width // max_frets
     position = 0
     frets = 0
     pygame.draw.rect(self.fretboard, BLACK, (position, 0, fret_width * 2, ref_rect.bottom))
@@ -76,16 +81,19 @@ class MainApp:
     x = x_origin + (x_spacing//2)
     y = y_origin
     note_radius = 20
-    for j in range(max_frets):
+    guitar_strings = self.state.guitar.get_strings()
+    for fret in range(1, max_frets + 1):
       # draw notes
-      for i in range(max_strings):
-        pygame.draw.circle(self.window, GRAY, (x, y), note_radius)
+      for string_p in reversed(guitar_strings):
+        n_img = pygame.draw.circle(self.window, GRAY, (x, y), note_radius) # circle of note
+        active_note = self.state.guitar.get_note(string_p, fret)
+        active_note_surf = self.notefont.render(active_note.__str__(), True, NOTE_COLOR)
+        active_note_rect = active_note_surf.get_rect(center=n_img.center)
+        self.window.blit(active_note_surf, active_note_rect)
         y += y_spacing
       # update variables
       y = y_origin
       x += x_spacing
-    
-    
     pygame.display.update()
 
 
@@ -104,7 +112,7 @@ class AppState():
     
 
 
-
-a = MainApp()
-a.run()
-pygame.quit()
+if __name__ == "__main__":
+  a = App()
+  a.run()
+  pygame.quit()
