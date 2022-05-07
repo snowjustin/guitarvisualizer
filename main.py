@@ -1,19 +1,20 @@
 import pygame
+import pygame.gfxdraw
 import lib.guitar as guitar
 import pathlib
 
 SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 320
+SCREEN_HEIGHT = 400
 FRAME_RATE = 60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 GRAY = (125, 125, 125)
-NOTE_COLOR = (25, 255, 25)
+NOTE_COLOR = WHITE #(25, 255, 25)
 
 FONT_PATH = pathlib.Path('font/Share-Regular.ttf')
 
-class App:
+class UserInterface:
   def __init__(self):
     pygame.init()
     self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -21,7 +22,6 @@ class App:
     self.clock = pygame.time.Clock()
     self.running = True
     self.state = AppState()
-    self.notefont = pygame.font.Font(FONT_PATH, 24)
 
 
   def process_input(self):
@@ -41,11 +41,23 @@ class App:
 
   def render(self):
     self.window.fill(WHITE)
+    # Setup the buttons you can use in the game.
+    cb_font = pygame.font.Font(FONT_PATH, 26)
+    cb_rect = pygame.Rect(20, 20, 150, 40)
+    if cb_rect.collidepoint(pygame.mouse.get_pos()):
+      cb_button = pygame.draw.rect(self.window, BLACK, cb_rect, 0, 4)
+      cb_surf = cb_font.render("Build Chord", True, WHITE)
+    else:
+      cb_button = pygame.draw.rect(self.window, BLACK, cb_rect, 5, 4)
+      cb_surf = cb_font.render("Build Chord", True, BLACK)
+    
+    cb_rect = cb_surf.get_rect(center=cb_button.center)
+    self.window.blit(cb_surf, cb_rect)   
 
     # Setup the fretboard
-    x_origin, y_origin = 30, 30
-    width = SCREEN_WIDTH - 40
-    height = SCREEN_HEIGHT - 40
+    x_origin, y_origin = 20, 90
+    width = 760
+    height = 280
     max_frets = self.state.guitar.get_number_of_frets()
     max_strings = len(self.state.guitar.strings)
     self.fretboard = pygame.Surface((width, height - 40))
@@ -80,18 +92,22 @@ class App:
     y_spacing = (height // max_strings)
     x = x_origin + (x_spacing//2)
     y = y_origin
-    note_radius = 20
+    note_radius = int(y_spacing // 2.25)
     guitar_strings = self.state.guitar.get_strings()
+    notefont = pygame.font.Font(FONT_PATH, 24)
+
     for fret in range(1, max_frets + 1):
       # draw notes
       for string_p in reversed(guitar_strings):
-        n_img = pygame.draw.circle(self.window, GRAY, (x, y), note_radius) # circle of note
+        n_img = pygame.draw.circle(self.window, GRAY, (x, y), note_radius)
+        if n_img.collidepoint(pygame.mouse.get_pos()):
+          pygame.draw.circle(self.window, BLACK, (x, y), note_radius, string_width)
         active_note = self.state.guitar.get_note(string_p, fret)
-        active_note_surf = self.notefont.render(active_note.__str__(), True, NOTE_COLOR)
+        active_note_surf = notefont.render(active_note.__str__(), True, NOTE_COLOR)
         active_note_rect = active_note_surf.get_rect(center=n_img.center)
         self.window.blit(active_note_surf, active_note_rect)
         y += y_spacing
-      # update variables
+
       y = y_origin
       x += x_spacing
     pygame.display.update()
@@ -113,6 +129,6 @@ class AppState():
 
 
 if __name__ == "__main__":
-  a = App()
+  a = UserInterface()
   a.run()
   pygame.quit()
