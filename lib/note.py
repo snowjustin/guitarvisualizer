@@ -66,11 +66,16 @@ class Note:
   def copy(self):
     return Note(self.note, self.octave)
 
+
   def __str__(self):
     if len(self.note) > 1:
       return self.note[:2]
     else:
       return self.note
+
+  
+  def __repr__(self):
+    return f'Note({self.note}, {self.octave})'
 
 
 
