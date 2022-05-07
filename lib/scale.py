@@ -1,4 +1,4 @@
-import app.note as note
+import lib.note as note
 
 # Constants for different standard western scales based on semitone or wholetone differences.
 # Seven note scales/modes

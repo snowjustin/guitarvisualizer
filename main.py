@@ -1,4 +1,5 @@
 import pygame
+import lib.guitar as guitar
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 320
@@ -6,9 +7,10 @@ FRAME_RATE = 60
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GRAY = (125, 125, 125)
 
 
-class App:
+class MainApp:
   def __init__(self):
     pygame.init()
     self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -36,9 +38,11 @@ class App:
     self.window.fill(WHITE)
 
     # Setup the fretboard
+    x_origin, y_origin = 30, 30
     width = SCREEN_WIDTH - 40
     height = SCREEN_HEIGHT - 40
-    string_width = 2
+    max_frets = 12
+    max_strings = 6
     self.fretboard = pygame.Surface((width, height - 40))
     self.fretboard.fill(WHITE)
     
@@ -46,8 +50,10 @@ class App:
     space_between = height // 6
     position = 0
     strings = 0
-    while strings < 6:
-      ref_rect = pygame.draw.rect(self.fretboard, BLACK, (0, position, (width // 12) * 12, string_width))
+    string_width = fret_width = 2
+    string_length = (width // max_frets) * max_frets
+    while strings < max_strings:
+      ref_rect = pygame.draw.rect(self.fretboard, BLACK, (0, position, string_length, string_width))
       position += space_between
       strings += 1
 
@@ -55,15 +61,31 @@ class App:
     space_between = width // 12
     position = 0
     frets = 0
-    pygame.draw.rect(self.fretboard, BLACK, (position, 0, string_width * 2, ref_rect.bottom))
+    pygame.draw.rect(self.fretboard, BLACK, (position, 0, fret_width * 2, ref_rect.bottom))
     position += space_between
-    while frets < 12:
-      pygame.draw.rect(self.fretboard, BLACK, (position, 0, string_width, ref_rect.bottom))
+    while frets < max_frets:
+      pygame.draw.rect(self.fretboard, BLACK, (position, 0, fret_width, ref_rect.bottom))
       position += space_between
       frets += 1
 
+    self.window.blit(self.fretboard, (x_origin, y_origin))
+
     # Draw notes
-    self.window.blit(self.fretboard, (20,20))
+    x_spacing = (width // max_frets)
+    y_spacing = (height // max_strings)
+    x = x_origin + (x_spacing//2)
+    y = y_origin
+    note_radius = 20
+    for j in range(max_frets):
+      # draw notes
+      for i in range(max_strings):
+        pygame.draw.circle(self.window, GRAY, (x, y), note_radius)
+        y += y_spacing
+      # update variables
+      y = y_origin
+      x += x_spacing
+    
+    
     pygame.display.update()
 
 
@@ -75,6 +97,14 @@ class App:
       self.clock.tick(FRAME_RATE)
 
 
-app = App()
-app.run()
+
+class AppState():
+  def __init__(self):
+    self.guitar = guitar.Guitar()
+    
+
+
+
+a = MainApp()
+a.run()
 pygame.quit()

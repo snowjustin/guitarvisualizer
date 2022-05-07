@@ -1,5 +1,5 @@
 import unittest
-import app.note as note
+import lib.note as note
 
 # When used frequencies were pulled from https://pages.mtu.edu/~suits/notefreqs.html as a resource
 

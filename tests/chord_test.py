@@ -1,6 +1,6 @@
 import unittest
-import app.chord as chord
-import app.note as note
+import lib.chord as chord
+import lib.note as note
 
 class TestChordClass(unittest.TestCase):
   def test_init(self):

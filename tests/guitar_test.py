@@ -1,6 +1,6 @@
 import unittest
-import app.guitar as guitar
-import app.note as note
+import lib.guitar as guitar
+import lib.note as note
 
 class TestGuitarClass(unittest.TestCase):
   def test_init(self):

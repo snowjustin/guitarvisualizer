@@ -1,6 +1,6 @@
 import unittest
-import app.scale as scale
-import app.note as note
+import lib.scale as scale
+import lib.note as note
 
 class TestScaleClass(unittest.TestCase):
   def test_init(self):
