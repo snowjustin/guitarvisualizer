@@ -22,6 +22,8 @@ class UserInterface:
     self.clock = pygame.time.Clock()
     self.running = True
     self.state = AppState()
+    self.build_chord = Button(self.state, pygame.Rect(20, 20, 150, 40), "Build Chord")
+    self.build_chord_clicked = False
 
 
   def process_input(self):
@@ -33,6 +35,10 @@ class UserInterface:
         if event.key == pygame.K_ESCAPE:
           self.running = False
           break
+      elif event.type == pygame.MOUSEBUTTONDOWN:
+        if event.button == 1: # left button
+          if self.build_chord.location.collidepoint(pygame.mouse.get_pos()):
+            self.state.building_chord = not self.state.building_chord
 
 
   def update(self):
@@ -42,17 +48,7 @@ class UserInterface:
   def render(self):
     self.window.fill(WHITE)
     # Setup the buttons you can use in the game.
-    cb_font = pygame.font.Font(FONT_PATH, 26)
-    cb_rect = pygame.Rect(20, 20, 150, 40)
-    if cb_rect.collidepoint(pygame.mouse.get_pos()):
-      cb_button = pygame.draw.rect(self.window, BLACK, cb_rect, 0, 4)
-      cb_surf = cb_font.render("Build Chord", True, WHITE)
-    else:
-      cb_button = pygame.draw.rect(self.window, BLACK, cb_rect, 5, 4)
-      cb_surf = cb_font.render("Build Chord", True, BLACK)
-    
-    cb_rect = cb_surf.get_rect(center=cb_button.center)
-    self.window.blit(cb_surf, cb_rect)   
+    self.build_chord.render(self.window)
 
     # Setup the fretboard
     x_origin, y_origin = 20, 90
@@ -125,8 +121,34 @@ class UserInterface:
 class AppState():
   def __init__(self):
     self.guitar = guitar.Guitar()
+    self.building_chord = False
     
 
+
+class Button():
+  def __init__(self, state_tracker, location, button_text):
+    self.state = state_tracker
+    self.location = location
+    self.text = button_text
+
+  def render(self, surface):
+    # Setup the buttons you can use in the game.
+    if self.state.building_chord:
+      button_color = text_color = (25, 25, 225)
+    else:
+      button_color = text_color = BLACK
+
+    if self.location.collidepoint(pygame.mouse.get_pos()):
+      mouse_hover = 0
+      text_color = WHITE
+    else:
+      mouse_hover = 5
+
+    cb_font = pygame.font.Font(FONT_PATH, 26)
+    cb_button = pygame.draw.rect(surface, button_color, self.location, mouse_hover, 4)
+    cb_surf = cb_font.render(self.text, True, text_color)
+    cb_rect = cb_surf.get_rect(center=cb_button.center)
+    surface.blit(cb_surf, cb_rect)   
 
 if __name__ == "__main__":
   a = UserInterface()
