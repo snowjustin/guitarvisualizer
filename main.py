@@ -13,6 +13,8 @@ GRAY = (132, 129, 122)
 PURPLE = (112, 111, 211)
 NOTE_COLOR = WHITE
 
+NOTE_COLORS = [(112, 111, 211), (52, 172, 224), (51, 217, 178), (255, 82, 82), (255, 121, 63)]
+NOTE_COLORS_SECONDARY = [(71, 71, 135), (34, 112, 147), (33, 140, 116), (179, 57, 57), (205, 97, 51)]
 FONT_PATH = pathlib.Path('font/Share-Regular.ttf')
 
 class UserInterface:
@@ -74,7 +76,8 @@ class AppState():
       if note in self.active_chord:
         self.active_chord.remove(note)
       else:
-        self.active_chord.append(note)
+        if len(self.active_chord) < 5:  # temp circumstance to only allow 5 chord notes at a maximum.
+          self.active_chord.append(note)
     
 
 
@@ -158,10 +161,18 @@ class Fretboard():
     for fret in range(1, max_frets + 1):
       # draw notes
       for string_p in reversed(guitar_strings):
-        if self.state.guitar.get_note(string_p, fret) in self.state.active_chord:
-          n_img = pygame.draw.circle(surface, PURPLE, (x, y), note_radius)
-        else:  
-          n_img = pygame.draw.circle(surface, GRAY, (x, y), note_radius)
+        current_note = self.state.guitar.get_note(string_p, fret)
+        if current_note in self.state.active_chord:
+          n_img = pygame.draw.circle(surface, NOTE_COLORS[self.state.active_chord.index(current_note)], (x, y), note_radius)
+        else:
+          note_found = False
+          for n in self.state.active_chord:
+            if n.note == current_note.note:
+              n_img = pygame.draw.circle(surface, NOTE_COLORS_SECONDARY[self.state.active_chord.index(n)], (x, y), note_radius)
+              note_found = True
+              break
+          if not note_found:
+            n_img = pygame.draw.circle(surface, GRAY, (x, y), note_radius)
         if n_img.collidepoint(pygame.mouse.get_pos()):
           pygame.draw.circle(surface, BLACK, (x, y), note_radius, string_width)
         active_note = self.state.guitar.get_note(string_p, fret)
