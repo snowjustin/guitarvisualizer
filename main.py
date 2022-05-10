@@ -182,7 +182,7 @@ class Fretboard():
         surface.blit(active_note_surf, active_note_rect)
         y += y_spacing
         self.note_positions.append({
-          "pos": active_note_rect, 
+          "pos": n_img,  # we store the rect for the circle since it is bigger than that of the letters being draw for the notes.
           "note": active_note
         })
 
