@@ -1,10 +1,18 @@
-Guitar Visualizer Ideas
+# Guitar Visualizer
 
-Feature List
-============
+## About this project
+This project was designed to allow me to experiment with learning how to understand music theory and at the same time how to also begin visualizing other ways of playing chords or arpeggios on a guitar.
 
-Main Features
-- Display a fretboard of all the notes on the guitar on the first 12 frets
+## How to run
+Written using:
+- Pygame 2.1.0
+- Python 3.10.0
+
+To run execute the following command in a terminal: `python main.py`
+
+## Feature List
+Main Features:
+- Display a fretboard of all the notes on the guitar on the first 12 frets plus the open strings.
 - Visualize chords by entering a "chord builder" mode where you can click on the notes on the guitar.
 - Allow the tuning of the instrument to be changed.
 
@@ -17,6 +25,3 @@ Other features that seem rather useful:
 - Add voice recognition support for poops and giggles
 - Provide other fretboard lengths
 - Support other instruments such as ukulele, bass, piano, etc.
-
-Structure
-=========

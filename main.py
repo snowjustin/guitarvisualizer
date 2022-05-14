@@ -26,10 +26,11 @@ class UserInterface:
     self.clock = pygame.time.Clock()
     self.running = True
     self.state = AppState()
+    # UI components
     self.build_chord_button = Button(self.state, pygame.Rect(20, 20, 150, 40), "Build Chord")
-    self.fretboard = Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
-    self.update_active_chord = False
-    self.update_active_chord_position = None
+    self.fretboard_ui = Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
+    # TODO: add status bar to guide user
+    # TODO: add component for showing selected chord.
 
 
   def process_input(self):
@@ -45,8 +46,8 @@ class UserInterface:
         if event.button == 1: # left button
           if self.build_chord_button.position.collidepoint(event.pos):
             self.state.building_chord = not self.state.building_chord
-          elif self.state.building_chord and self.fretboard.position.collidepoint(event.pos):
-            for note in self.fretboard.note_positions:
+          elif self.state.building_chord and self.fretboard_ui.position.collidepoint(event.pos):
+            for note in self.fretboard_ui.note_positions:
               if note["pos"].collidepoint(event.pos):
                 self.state.update(note["note"])
 
@@ -54,7 +55,7 @@ class UserInterface:
   def render(self):
     self.window.fill(WHITE)
     self.build_chord_button.render(self.window)
-    self.fretboard.render(self.window)
+    self.fretboard_ui.render(self.window)
     pygame.display.update()
 
 
@@ -89,7 +90,6 @@ class Button():
     self.text = button_text
 
   def render(self, surface):
-    # Setup the buttons you can use in the game.
     if self.state.building_chord:
       button_color = text_color = (34, 112, 147)
     else:
