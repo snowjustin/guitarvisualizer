@@ -17,8 +17,8 @@ class UserInterface:
     # UI components
     self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
-    # TODO: add status bar to guide user
-    # TODO: add component for showing selected chord.
+    self.key_picker_button = component.Button(self.state, pygame.Rect(200, 20, 150, 40), "Pick Key")
+    # self.status_bar = component.TextArea(self.state, pygame.Rect())
 
 
   def process_input(self):
@@ -32,8 +32,14 @@ class UserInterface:
           break
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1: # left button
-          if self.build_chord_button.position.collidepoint(event.pos):
+          if self.build_chord_button.position.collidepoint(event.pos) and not self.state.picking_key:
             self.state.building_chord = not self.state.building_chord
+            self.build_chord_button.set_active_state(self.state.building_chord)
+
+          elif self.key_picker_button.position.collidepoint(event.pos) and not self.state.building_chord:
+            self.state.picking_key = not self.state.picking_key
+            self.key_picker_button.set_active_state(self.state.picking_key)
+
           elif self.state.building_chord and self.fretboard_ui.position.collidepoint(event.pos):
             for note in self.fretboard_ui.note_positions:
               if note["pos"].collidepoint(event.pos):
@@ -44,6 +50,7 @@ class UserInterface:
     self.window.fill(constants.WHITE)
     self.build_chord_button.render(self.window)
     self.fretboard_ui.render(self.window)
+    self.key_picker_button.render(self.window)
     pygame.display.update()
 
 
@@ -59,6 +66,7 @@ class AppState():
   def __init__(self):
     self.guitar = guitar.Guitar()
     self.building_chord = False
+    self.picking_key = False
     self.active_chord = []
 
   def update(self, note):

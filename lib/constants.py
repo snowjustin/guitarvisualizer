@@ -5,6 +5,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 400
 FRAME_RATE = 60
 APP_TITLE = "Guitar Visualizer"
+DEBUG_MODE = False
 
 # color palette used: https://flatuicolors.com/palette/es
 WHITE = (247, 241, 227)

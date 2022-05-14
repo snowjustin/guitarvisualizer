@@ -17,9 +17,15 @@ class Button(Component):
   def __init__(self, state, position, button_text):
     super().__init__(state, position)
     self.text = button_text
+    self.active = False
+
+  
+  def set_active_state(self, state):
+    self.active = state
+
 
   def render(self, surface):
-    if self.state.building_chord:
+    if self.active:
       button_color = text_color = constants.BUTTON_ACTIVE
     else:
       button_color = text_color = constants.BUTTON_INACTIVE
@@ -76,6 +82,8 @@ class Fretboard(Component):
       position += space_between
       frets += 1
 
+    if constants.DEBUG_MODE:
+      pygame.draw.rect(fretboard, constants.RED, fretboard.get_rect(), 1)  
     surface.blit(fretboard, (x_origin, y_origin))
 
     # Draw notes
