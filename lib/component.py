@@ -31,8 +31,8 @@ class Button(Component):
     else:
       mouse_hover = 5
 
-    cb_font = pygame.font.Font(constants.FONT_PATH, 26)
-    cb_button = pygame.draw.rect(surface, button_color, self.position, mouse_hover, 4)
+    cb_font = pygame.font.Font(constants.FONT_PATH, constants.BUTTON_FONT_SIZE)
+    cb_button = pygame.draw.rect(surface, button_color, self.position, mouse_hover, constants.BUTTON_CORNER_RADIUS)
     cb_surf = cb_font.render(self.text, True, text_color)
     cb_rect = cb_surf.get_rect(center=cb_button.center)
     surface.blit(cb_surf, cb_rect)
@@ -82,11 +82,11 @@ class Fretboard(Component):
     self.note_positions = []
     x_spacing = (width // max_frets)
     y_spacing = (height // max_strings)
-    x = x_origin + (x_spacing//2)
+    x = x_origin + (x_spacing // 2)
     y = y_origin
     note_radius = int(y_spacing // 2.25)
     guitar_strings = self.state.guitar.get_strings()
-    notefont = pygame.font.Font(constants.FONT_PATH, 24)
+    notefont = pygame.font.Font(constants.FONT_PATH, constants.NOTE_FONT_SIZE)
 
     for fret in range(1, max_frets + 1):
       # draw notes

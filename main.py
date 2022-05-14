@@ -4,22 +4,18 @@ import lib.guitar as guitar
 import lib.component as component
 import lib.constants as constants
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 400
-FRAME_RATE = 60
-
 
 
 class UserInterface:
   def __init__(self):
     pygame.init()
-    self.window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Guitar Visualizer")
+    self.window = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    pygame.display.set_caption(constants.APP_TITLE)
     self.clock = pygame.time.Clock()
     self.running = True
     self.state = AppState()
     # UI components
-    self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), "Build Chord")
+    self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
     # TODO: add status bar to guide user
     # TODO: add component for showing selected chord.
@@ -55,7 +51,7 @@ class UserInterface:
     while self.running:
       self.process_input()
       self.render()
-      self.clock.tick(FRAME_RATE)
+      self.clock.tick(constants.FRAME_RATE)
 
 
 
@@ -70,7 +66,7 @@ class AppState():
       if note in self.active_chord:
         self.active_chord.remove(note)
       else:
-        if len(self.active_chord) < 5:  # temp circumstance to only allow 5 chord notes at a maximum.
+        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES:  # temp circumstance to only allow 5 chord notes at a maximum.
           self.active_chord.append(note)
 
 
