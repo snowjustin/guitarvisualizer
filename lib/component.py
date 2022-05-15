@@ -57,7 +57,7 @@ class Fretboard(Component):
     height = self.position.height
     max_frets = self.state.guitar.get_number_of_frets()
     max_strings = len(self.state.guitar.strings)
-    fretboard = pygame.Surface((width, height - 40))
+    fretboard = pygame.Surface((width, height))
     fretboard.fill(constants.WHITE)
     
     # Draw strings

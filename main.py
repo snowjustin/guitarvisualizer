@@ -40,7 +40,7 @@ class UserInterface:
             self.state.picking_key = not self.state.picking_key
             self.key_picker_button.set_active_state(self.state.picking_key)
 
-          elif self.state.building_chord and self.fretboard_ui.position.collidepoint(event.pos):
+          elif self.state.building_chord:
             for note in self.fretboard_ui.note_positions:
               if note["pos"].collidepoint(event.pos):
                 self.state.update(note["note"])
