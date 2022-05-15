@@ -17,9 +17,9 @@ class UserInterface:
     # UI components
     self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
-    self.key_picker_button = component.Button(self.state, pygame.Rect(200, 20, 150, 40), "Pick Key")
-    self.chord_info = component.TextArea(self.state, pygame.Rect(360, 20, 150, 20), "Chord Info", constants.BLACK, constants.WHITE)
-    self.key_info = component.TextArea(self.state, pygame.Rect(360, 40, 150, 20), "Key Info", constants.BLACK, constants.WHITE)
+    self.key_picker_button = component.Button(self.state, pygame.Rect(200, 20, 150, 40), constants.PICK_KEY_BUTTON_TEXT)
+    self.chord_info = component.TextArea(self.state, pygame.Rect(360, 20, 150, 20), self.state.active_chord_status, constants.BLACK, constants.WHITE)
+    self.key_info = component.TextArea(self.state, pygame.Rect(360, 40, 150, 20), self.state.active_key_status, constants.BLACK, constants.WHITE)
     status_bar_rect = pygame.Rect(0, constants.SCREEN_HEIGHT - 20, constants.SCREEN_WIDTH, 20)
     self.status_bar = component.TextArea(self.state, status_bar_rect, self.state.status_message, constants.GREEN, constants.GRAY)
 
@@ -39,7 +39,7 @@ class UserInterface:
             self.state.building_chord = not self.state.building_chord
             self.build_chord_button.set_active_state(self.state.building_chord)
             if self.state.building_chord: 
-              self.state.status_message = "Building a chord..."
+              self.state.status_message = constants.BUILD_CHORD_STATUS_TEXT
             else:
               self.state.status_message = ""
 
@@ -47,7 +47,7 @@ class UserInterface:
             self.state.picking_key = not self.state.picking_key
             self.key_picker_button.set_active_state(self.state.picking_key)
             if self.state.picking_key: 
-              self.state.status_message = "Picking a key..."
+              self.state.status_message = constants.PICK_KEY_STATUS_TEXT
             else:
               self.state.status_message = ""
 
@@ -62,8 +62,8 @@ class UserInterface:
     self.build_chord_button.render(self.window)
     self.fretboard_ui.render(self.window)
     self.key_picker_button.render(self.window)
-    self.chord_info.render(self.window)
-    self.key_info.render(self.window)
+    self.chord_info.render(self.window, self.state.active_chord_status)
+    self.key_info.render(self.window, self.state.active_key_status)
     self.status_bar.render(self.window, self.state.status_message)
     pygame.display.update()
 
@@ -82,7 +82,9 @@ class AppState():
     self.building_chord = False
     self.picking_key = False
     self.active_chord = []
+    self.active_chord_status = "Chord:"
     self.status_message = ""
+    self.active_key_status = "Key:"
 
   def update(self, note):
     if self.building_chord:
@@ -91,6 +93,10 @@ class AppState():
       else:
         if len(self.active_chord) < constants.MAX_ACTIVE_NOTES:  # temp circumstance to only allow 5 chord notes at a maximum.
           self.active_chord.append(note)
+    self.active_chord_status = "Chord:"
+    if self.active_chord:      
+      for note in self.active_chord:
+        self.active_chord_status += " " + str(note)
 
 
 

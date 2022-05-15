@@ -27,6 +27,9 @@ BUTTON_INACTIVE = BLACK
 BUTTON_FONT_SIZE = 26
 BUTTON_CORNER_RADIUS = 4
 BUILD_CHORD_BUTTON_TEXT = "Build Chord"
+BUILD_CHORD_STATUS_TEXT = "Building a chord, select up to 5 notes for the chord..."
+PICK_KEY_BUTTON_TEXT = "Pick Key"
+PICK_KEY_STATUS_TEXT = "Picking a key..."
 
 TEXT_FONT_SIZE = 18
 
