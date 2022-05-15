@@ -125,3 +125,20 @@ class Fretboard(Component):
 
       y = y_origin
       x += x_spacing
+
+
+
+class TextArea(Component):
+  def __init__(self, state, position, text, textcolor, bgcolor):
+    super().__init__(state, position)
+    self.textcolor = textcolor
+    self.bgcolor = bgcolor
+    self.text = text
+
+  def render(self, surface):
+    ta_font = pygame.font.Font(constants.FONT_PATH, constants.TEXT_FONT_SIZE)
+    ta_area = pygame.draw.rect(surface, self.bgcolor, self.position)
+    ta_surf = ta_font.render(self.text, True, self.textcolor)
+    ta_rect = ta_surf.get_rect(midleft=ta_area.midleft)
+    surface.blit(ta_surf, ta_rect)
+

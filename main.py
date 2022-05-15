@@ -18,7 +18,9 @@ class UserInterface:
     self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
     self.key_picker_button = component.Button(self.state, pygame.Rect(200, 20, 150, 40), "Pick Key")
-    # self.status_bar = component.TextArea(self.state, pygame.Rect())
+    self.chord_info = component.TextArea(self.state, pygame.Rect(360, 20, 150, 20), "Chord Info", constants.BLACK, constants.WHITE)
+    self.key_info = component.TextArea(self.state, pygame.Rect(360, 40, 150, 20), "Key Info", constants.BLACK, constants.WHITE)
+    self.status_bar = component.TextArea(self.state, pygame.Rect(0, constants.SCREEN_HEIGHT - 20, constants.SCREEN_WIDTH, 20), "Status bar", constants.GREEN, constants.GRAY)
 
 
   def process_input(self):
@@ -51,6 +53,9 @@ class UserInterface:
     self.build_chord_button.render(self.window)
     self.fretboard_ui.render(self.window)
     self.key_picker_button.render(self.window)
+    self.chord_info.render(self.window)
+    self.key_info.render(self.window)
+    self.status_bar.render(self.window)
     pygame.display.update()
 
 
