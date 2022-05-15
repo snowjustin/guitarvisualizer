@@ -135,10 +135,13 @@ class TextArea(Component):
     self.bgcolor = bgcolor
     self.text = text
 
-  def render(self, surface):
+  def render(self, surface, text=None):
+    if text is not None:
+      self.text = text
     ta_font = pygame.font.Font(constants.FONT_PATH, constants.TEXT_FONT_SIZE)
     ta_area = pygame.draw.rect(surface, self.bgcolor, self.position)
     ta_surf = ta_font.render(self.text, True, self.textcolor)
-    ta_rect = ta_surf.get_rect(midleft=ta_area.midleft)
+    x, y = ta_area.midleft
+    ta_rect = ta_surf.get_rect(midleft=(x + 5, y))
     surface.blit(ta_surf, ta_rect)
 
