@@ -91,7 +91,8 @@ class AppState():
       if note in self.active_chord:
         self.active_chord.remove(note)
       else:
-        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES:  # temp circumstance to only allow 5 chord notes at a maximum.
+        active_notes = list(map(lambda n: n.note, self.active_chord))
+        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES and note.note not in active_notes:
           self.active_chord.append(note)
     self.active_chord_status = "Chord:"
     if self.active_chord:      
