@@ -42,6 +42,8 @@ class UserInterface:
               self.state.status_message = constants.BUILD_CHORD_STATUS_TEXT
             else:
               self.state.status_message = ""
+              self.state.active_chord = []
+              self.state.active_chord_status = "Chord:"
 
           elif self.key_picker_button.position.collidepoint(event.pos) and not self.state.building_chord:
             self.state.picking_key = not self.state.picking_key
@@ -84,7 +86,9 @@ class AppState():
     self.active_chord = []
     self.active_chord_status = "Chord:"
     self.status_message = ""
+    self.active_key = None
     self.active_key_status = "Key:"
+
 
   def update(self, note):
     if self.building_chord:
