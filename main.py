@@ -1,6 +1,7 @@
 import pygame
 import pygame.gfxdraw
 import lib.guitar as guitar
+import lib.scale as scale
 import lib.component as component
 import lib.constants as constants
 
@@ -82,11 +83,11 @@ class AppState():
   def __init__(self):
     self.guitar = guitar.Guitar()
     self.building_chord = False
-    self.picking_key = False
     self.active_chord = []
     self.active_chord_status = "Chord:"
     self.status_message = ""
-    self.active_key = None
+    self.picking_key = False
+    self.active_key = None # scale.Scale(scale.MAJOR, self.guitar.get_note(guitar.STRING_1, 1))
     self.active_key_status = "Key:"
 
 
@@ -102,6 +103,8 @@ class AppState():
     if self.active_chord:      
       for note in self.active_chord:
         self.active_chord_status += " " + str(note)
+    if self.active_key != None:
+      self.active_key_status = "Key: " + str(self.active_key.tonic)
 
 
 
