@@ -1,4 +1,5 @@
 import pathlib
+from mingus.extra import tunings
 
 # General Properties
 SCREEN_WIDTH = 800
@@ -40,3 +41,17 @@ NOTE_COLORS_SECONDARY = [PURPLE_DARK, TEAL, GREEN_DARK, RED_DARK, ORANGE_DARK]
 MAX_ACTIVE_NOTES = len(NOTE_COLORS)
 
 FONT_PATH = pathlib.Path('font/Share-Regular.ttf')
+
+# Keybinding Mappings
+
+
+# Instrument constants
+DEFAULT_GUITAR = {
+    'instrument': tunings.get_tuning(
+        instrument='guitar',
+        description='standard',
+        nr_of_strings=6,
+        nr_of_courses=1
+    ), 
+    'frets': 14
+}

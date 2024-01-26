@@ -1,7 +1,6 @@
 import pygame
 import pygame.gfxdraw
-import lib.guitar as guitar
-import lib.scale as scale
+from mingus.containers import NoteContainer
 import lib.component as component
 import lib.constants as constants
 
@@ -18,9 +17,8 @@ class UserInterface:
     # UI components
     self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
-    self.key_picker_button = component.Button(self.state, pygame.Rect(200, 20, 150, 40), constants.PICK_KEY_BUTTON_TEXT)
-    self.chord_info = component.TextArea(self.state, pygame.Rect(360, 20, 150, 20), self.state.active_chord_status, constants.BLACK, constants.WHITE)
-    self.key_info = component.TextArea(self.state, pygame.Rect(360, 40, 150, 20), self.state.active_key_status, constants.BLACK, constants.WHITE)
+    self.chord_info = component.TextArea(self.state, pygame.Rect(200, 20, 150, 20), self.state.active_chord_status, constants.BLACK, constants.WHITE)
+    self.chord_name = component.TextArea(self.state, pygame.Rect(200, 40, 150, 20), self.state.active_chord_name, constants.BLACK, constants.WHITE)
     status_bar_rect = pygame.Rect(0, constants.SCREEN_HEIGHT - 20, constants.SCREEN_WIDTH, 20)
     self.status_bar = component.TextArea(self.state, status_bar_rect, self.state.status_message, constants.GREEN, constants.GRAY)
 
@@ -36,23 +34,15 @@ class UserInterface:
           break
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1: # left button
-          if self.build_chord_button.position.collidepoint(event.pos) and not self.state.picking_key:
+          if self.build_chord_button.position.collidepoint(event.pos):
             self.state.building_chord = not self.state.building_chord
             self.build_chord_button.set_active_state(self.state.building_chord)
             if self.state.building_chord: 
               self.state.status_message = constants.BUILD_CHORD_STATUS_TEXT
             else:
               self.state.status_message = ""
-              self.state.active_chord = []
-              self.state.active_chord_status = "Chord:"
-
-          elif self.key_picker_button.position.collidepoint(event.pos) and not self.state.building_chord:
-            self.state.picking_key = not self.state.picking_key
-            self.key_picker_button.set_active_state(self.state.picking_key)
-            if self.state.picking_key: 
-              self.state.status_message = constants.PICK_KEY_STATUS_TEXT
-            else:
-              self.state.status_message = ""
+              self.state.active_chord = NoteContainer()
+              self.active_chord_status = "Notes Selected:"
 
           elif self.state.building_chord:
             for note in self.fretboard_ui.note_positions:
@@ -64,9 +54,8 @@ class UserInterface:
     self.window.fill(constants.WHITE)
     self.build_chord_button.render(self.window)
     self.fretboard_ui.render(self.window)
-    self.key_picker_button.render(self.window)
     self.chord_info.render(self.window, self.state.active_chord_status)
-    self.key_info.render(self.window, self.state.active_key_status)
+    self.chord_name.render(self.window, self.state.active_chord_name)
     self.status_bar.render(self.window, self.state.status_message)
     pygame.display.update()
 
@@ -81,30 +70,28 @@ class UserInterface:
 
 class AppState():
   def __init__(self):
-    self.guitar = guitar.Guitar()
+    self.guitar = constants.DEFAULT_GUITAR
     self.building_chord = False
-    self.active_chord = []
-    self.active_chord_status = "Chord:"
+    self.active_chord = NoteContainer()
+    self.active_chord_status = "Notes Selected:"
+    self.active_chord_name = "Name: "
     self.status_message = ""
-    self.picking_key = False
-    self.active_key = None # scale.Scale(scale.MAJOR, self.guitar.get_note(guitar.STRING_1, 1))
-    self.active_key_status = "Key:"
+    
 
 
   def update(self, note):
     if self.building_chord:
       if note in self.active_chord:
-        self.active_chord.remove(note)
+        self.active_chord.remove_note(note)
       else:
-        active_notes = list(map(lambda n: n.note, self.active_chord))
-        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES and note.note not in active_notes:
-          self.active_chord.append(note)
-    self.active_chord_status = "Chord:"
-    if self.active_chord:      
+        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES and note not in self.active_chord:
+          self.active_chord.add_note(note)
+    self.active_chord_status = "Notes Selected:"
+    if len(self.active_chord):
       for note in self.active_chord:
-        self.active_chord_status += " " + str(note)
-    if self.active_key != None:
-      self.active_key_status = "Key: " + str(self.active_key.tonic)
+        self.active_chord_status += " " + str(note).strip("'") + ","
+      self.active_chord_status = self.active_chord_status[:-1]
+      self.active_chord_name = "Name: " + str(self.active_chord.determine(True))
 
 
 

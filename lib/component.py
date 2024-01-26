@@ -1,4 +1,5 @@
 import pygame
+from mingus.core.notes import note_to_int
 import lib.constants as constants
 
 
@@ -55,8 +56,8 @@ class Fretboard(Component):
     x_origin, y_origin = self.position.left, self.position.top
     width = self.position.width
     height = self.position.height
-    max_frets = self.state.guitar.get_number_of_frets()
-    max_strings = len(self.state.guitar.strings)
+    max_frets = self.state.guitar['frets']
+    max_strings = self.state.guitar['instrument'].count_strings()
     fretboard = pygame.Surface((width, height))
     fretboard.fill(constants.WHITE)
     
@@ -93,28 +94,20 @@ class Fretboard(Component):
     x = x_origin + (x_spacing // 2)
     y = y_origin
     note_radius = int(y_spacing // 2.25)
-    guitar_strings = self.state.guitar.get_strings()
     notefont = pygame.font.Font(constants.FONT_PATH, constants.NOTE_FONT_SIZE)
 
-    for fret in range(1, max_frets + 1):
+    for fret in range(max_frets):
       # draw notes
-      for string_p in reversed(guitar_strings):
-        current_note = self.state.guitar.get_note(string_p, fret)
+      for string_p in range(max_strings):
+        current_note = self.state.guitar["instrument"].get_Note(string_p, fret)
         if current_note in self.state.active_chord:
-          n_img = pygame.draw.circle(surface, constants.NOTE_COLORS[self.state.active_chord.index(current_note)], (x, y), note_radius)
+          n_img = pygame.draw.circle(surface, constants.NOTE_COLORS[0], (x, y), note_radius)
         else:
-          note_found = False
-          for n in self.state.active_chord:
-            if n.note == current_note.note:
-              n_img = pygame.draw.circle(surface, constants.NOTE_COLORS_SECONDARY[self.state.active_chord.index(n)], (x, y), note_radius)
-              note_found = True
-              break
-          if not note_found:
-            n_img = pygame.draw.circle(surface, constants.GRAY, (x, y), note_radius)
+          n_img = pygame.draw.circle(surface, constants.GRAY, (x, y), note_radius)
         if n_img.collidepoint(pygame.mouse.get_pos()):
           pygame.draw.circle(surface, constants.BLACK, (x, y), note_radius, string_width)
-        active_note = self.state.guitar.get_note(string_p, fret)
-        active_note_surf = notefont.render(active_note.__str__(), True, constants.NOTE_COLOR)
+        active_note = self.state.guitar["instrument"].get_Note(string_p, fret)
+        active_note_surf = notefont.render(active_note.__str__().strip("'").split('-')[0], True, constants.NOTE_COLOR)
         active_note_rect = active_note_surf.get_rect(center=n_img.center)
         surface.blit(active_note_surf, active_note_rect)
         y += y_spacing
