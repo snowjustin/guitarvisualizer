@@ -33,13 +33,20 @@ class Button(Component):
 
     if self.position.collidepoint(pygame.mouse.get_pos()):
       mouse_hover = 0
-      text_color = surface.get_at((0, 0)) # this allows us to use the background
-                                                # color of the main window to create hover effect
+      # this allows us to use the background
+      # color of the main window to create hover effect
+      text_color = surface.get_at((0, 0))
     else:
       mouse_hover = 5
 
     cb_font = pygame.font.Font(constants.FONT_PATH, constants.BUTTON_FONT_SIZE)
-    cb_button = pygame.draw.rect(surface, button_color, self.position, mouse_hover, constants.BUTTON_CORNER_RADIUS)
+    cb_button = pygame.draw.rect(
+        surface, 
+        button_color, 
+        self.position, 
+        mouse_hover, 
+        constants.BUTTON_CORNER_RADIUS
+      )
     cb_surf = cb_font.render(self.text, True, text_color)
     cb_rect = cb_surf.get_rect(center=cb_button.center)
     surface.blit(cb_surf, cb_rect)
@@ -68,7 +75,11 @@ class Fretboard(Component):
     string_width = fret_width = 2
     string_length = (width // max_frets) * max_frets
     while strings < max_strings:
-      ref_rect = pygame.draw.rect(fretboard, constants.BLACK, (0, position, string_length, string_width))
+      ref_rect = pygame.draw.rect(
+          fretboard, 
+          constants.BLACK, 
+          (0, position, string_length, string_width)
+        )
       position += space_between
       strings += 1
 
@@ -76,10 +87,20 @@ class Fretboard(Component):
     space_between = width // max_frets
     position = 0
     frets = 0
-    pygame.draw.rect(fretboard, constants.BLACK, (position, 0, fret_width * 2, ref_rect.bottom))
+    pygame.draw.rect(
+        fretboard, 
+        constants.BLACK, 
+        (position, 
+         0, 
+         fret_width * 2, ref_rect.bottom)
+      )
     position += space_between
     while frets < max_frets:
-      pygame.draw.rect(fretboard, constants.BLACK, (position, 0, fret_width, ref_rect.bottom))
+      pygame.draw.rect(
+          fretboard, 
+          constants.BLACK, 
+          (position, 0, fret_width, ref_rect.bottom)
+        )
       position += space_between
       frets += 1
 
@@ -93,7 +114,7 @@ class Fretboard(Component):
     y_spacing = (height // max_strings)
     x = x_origin + (x_spacing // 2)
     y = y_origin
-    note_radius = int(y_spacing // 2.25)
+    note_radius = int(x_spacing // 2.5)
     notefont = pygame.font.Font(constants.FONT_PATH, constants.NOTE_FONT_SIZE)
 
     for fret in range(max_frets):
@@ -101,18 +122,34 @@ class Fretboard(Component):
       for string_p in range(max_strings):
         current_note = self.state.guitar["instrument"].get_Note(string_p, fret)
         if current_note in self.state.active_chord:
-          n_img = pygame.draw.circle(surface, constants.NOTE_COLORS[0], (x, y), note_radius)
+          n_img = pygame.draw.circle(
+              surface, 
+              constants.NOTE_COLORS[0], 
+              (x, y), 
+              note_radius
+            )
         else:
           n_img = pygame.draw.circle(surface, constants.GRAY, (x, y), note_radius)
         if n_img.collidepoint(pygame.mouse.get_pos()):
-          pygame.draw.circle(surface, constants.BLACK, (x, y), note_radius, string_width)
+          pygame.draw.circle(
+              surface, 
+              constants.BLACK, 
+              (x, y), 
+              note_radius, 
+              string_width
+            )
         active_note = self.state.guitar["instrument"].get_Note(string_p, fret)
-        active_note_surf = notefont.render(active_note.__str__().strip("'").split('-')[0], True, constants.NOTE_COLOR)
+        active_note_surf = notefont.render(
+            active_note.__str__().strip("'").split('-')[0], 
+            True, 
+            constants.NOTE_COLOR
+          )
         active_note_rect = active_note_surf.get_rect(center=n_img.center)
         surface.blit(active_note_surf, active_note_rect)
         y += y_spacing
         self.note_positions.append({
-          "pos": n_img,  # we store the rect for the circle since it is bigger than that of the letters being draw for the notes.
+          "pos": n_img,  # we store the rect for the circle since it is bigger 
+                         # than that of the letters being draw for the notes.
           "note": active_note
         })
 

@@ -9,18 +9,47 @@ import lib.constants as constants
 class UserInterface:
   def __init__(self):
     pygame.init()
-    self.window = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+    self.window = pygame.display.set_mode(
+        (constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT)
+      )
     pygame.display.set_caption(constants.APP_TITLE)
     self.clock = pygame.time.Clock()
     self.running = True
     self.state = AppState()
     # UI components
-    self.build_chord_button = component.Button(self.state, pygame.Rect(20, 20, 150, 40), constants.BUILD_CHORD_BUTTON_TEXT)
+    self.build_chord_button = component.Button(
+        self.state, 
+        pygame.Rect(20, 20, 150, 40), 
+        constants.BUILD_CHORD_BUTTON_TEXT
+      )
     self.fretboard_ui = component.Fretboard(self.state, pygame.Rect(20, 90, 760, 280))
-    self.chord_info = component.TextArea(self.state, pygame.Rect(200, 20, 150, 20), self.state.active_chord_status, constants.BLACK, constants.WHITE)
-    self.chord_name = component.TextArea(self.state, pygame.Rect(200, 40, 150, 20), self.state.active_chord_name, constants.BLACK, constants.WHITE)
-    status_bar_rect = pygame.Rect(0, constants.SCREEN_HEIGHT - 20, constants.SCREEN_WIDTH, 20)
-    self.status_bar = component.TextArea(self.state, status_bar_rect, self.state.status_message, constants.GREEN, constants.GRAY)
+    self.chord_info = component.TextArea(
+        self.state, 
+        pygame.Rect(200, 20, 150, 20), 
+        self.state.active_chord_status, 
+        constants.BLACK, 
+        constants.WHITE
+      )
+    self.chord_name = component.TextArea(
+        self.state, 
+        pygame.Rect(200, 40, 150, 20), 
+        self.state.active_chord_name, 
+        constants.BLACK, 
+        constants.WHITE
+      )
+    status_bar_rect = pygame.Rect(
+        0, 
+        constants.SCREEN_HEIGHT - 20, 
+        constants.SCREEN_WIDTH, 
+        20
+      )
+    self.status_bar = component.TextArea(
+        self.state, 
+        status_bar_rect, 
+        self.state.status_message, 
+        constants.GREEN, 
+        constants.GRAY
+      )
 
 
   def process_input(self):
@@ -84,7 +113,8 @@ class AppState():
       if note in self.active_chord:
         self.active_chord.remove_note(note)
       else:
-        if len(self.active_chord) < constants.MAX_ACTIVE_NOTES and note not in self.active_chord:
+        chord_len_comparison = len(self.active_chord) < constants.MAX_ACTIVE_NOTES
+        if chord_len_comparison and note not in self.active_chord:
           self.active_chord.add_note(note)
     self.active_chord_status = "Notes Selected:"
     if len(self.active_chord):
