@@ -101,7 +101,7 @@ class AppState():
   def __init__(self):
     self.guitar = constants.DEFAULT_GUITAR
     self.building_chord = False
-    self.active_chord = NoteContainer()
+    self.active_chord = []
     self.active_chord_status = "Notes Selected:"
     self.active_chord_name = "Name: "
     self.status_message = ""
@@ -109,19 +109,17 @@ class AppState():
 
 
   def update(self, note):
+    note_str = note.__str__().strip("'").split('-')[0]
     if self.building_chord:
-      if note in self.active_chord:
-        self.active_chord.remove_note(note)
+      if note_str in self.active_chord:
+        self.active_chord.remove(note_str)
       else:
         chord_len_comparison = len(self.active_chord) < self.guitar['max_active_notes']
-        if chord_len_comparison and note not in self.active_chord:
-          self.active_chord.add_note(note)
+        if chord_len_comparison and note_str not in self.active_chord:
+          self.active_chord.append(note_str)
     self.active_chord_status = "Notes Selected:"
     if len(self.active_chord):
-      for note in self.active_chord:
-        self.active_chord_status += " " + str(note).strip("'") + ","
       self.active_chord_status = self.active_chord_status[:-1]
-      self.active_chord_name = "Name: " + str(self.active_chord.determine(True))
 
 
 

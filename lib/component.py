@@ -119,12 +119,16 @@ class Fretboard(Component):
 
     for fret in range(max_frets):
       # draw notes
-      for string_p in range(max_strings):
+        # iterate in reverse order to have the
+        # fretboard appear as it would on tabs 
+      for string_p in reversed(range(max_strings)):
         current_note = self.state.guitar["instrument"].get_Note(string_p, fret)
-        if current_note in self.state.active_chord:
+        current_note_str = current_note.__str__().strip("'").split('-')[0]
+        if current_note_str in self.state.active_chord:
+          color_position = self.state.active_chord.index(current_note_str)
           n_img = pygame.draw.circle(
               surface, 
-              constants.NOTE_COLORS[0], 
+              constants.NOTE_COLORS[color_position],
               (x, y), 
               note_radius
             )
@@ -174,4 +178,3 @@ class TextArea(Component):
     x, y = ta_area.midleft
     ta_rect = ta_surf.get_rect(midleft=(x + 5, y))
     surface.blit(ta_surf, ta_rect)
-
