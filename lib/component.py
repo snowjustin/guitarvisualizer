@@ -114,7 +114,7 @@ class Fretboard(Component):
     y_spacing = (height // max_strings)
     x = x_origin + (x_spacing // 2)
     y = y_origin
-    note_radius = int(x_spacing // 2.5)
+    note_radius = int(min(x_spacing, y_spacing) // 2.5)
     notefont = pygame.font.Font(constants.FONT_PATH, constants.NOTE_FONT_SIZE)
 
     for fret in range(max_frets):

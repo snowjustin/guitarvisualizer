@@ -113,7 +113,7 @@ class AppState():
       if note in self.active_chord:
         self.active_chord.remove_note(note)
       else:
-        chord_len_comparison = len(self.active_chord) < constants.MAX_ACTIVE_NOTES
+        chord_len_comparison = len(self.active_chord) < self.guitar['max_active_notes']
         if chord_len_comparison and note not in self.active_chord:
           self.active_chord.add_note(note)
     self.active_chord_status = "Notes Selected:"

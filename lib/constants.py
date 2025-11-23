@@ -28,7 +28,7 @@ BUTTON_INACTIVE = BLACK
 BUTTON_FONT_SIZE = 26
 BUTTON_CORNER_RADIUS = 4
 BUILD_CHORD_BUTTON_TEXT = "Build Chord"
-BUILD_CHORD_STATUS_TEXT = "Building a chord, select up to 5 notes for the chord..."
+BUILD_CHORD_STATUS_TEXT = "Building a chord..."
 PICK_KEY_BUTTON_TEXT = "Pick Key"
 PICK_KEY_STATUS_TEXT = "Picking a key..."
 
@@ -38,7 +38,6 @@ NOTE_FONT_SIZE = 24
 NOTE_COLOR = WHITE
 NOTE_COLORS = [PURPLE, BLUE_SKY, GREEN, RED, ORANGE]
 NOTE_COLORS_SECONDARY = [PURPLE_DARK, TEAL, GREEN_DARK, RED_DARK, ORANGE_DARK]
-MAX_ACTIVE_NOTES = len(NOTE_COLORS)
 
 FONT_PATH = pathlib.Path('font/Share-Regular.ttf')
 
@@ -53,5 +52,6 @@ DEFAULT_GUITAR = {
         nr_of_strings=6,
         nr_of_courses=1
     ), 
-    'frets': 14
+    'frets': 24,
+    'max_active_notes': 6
 }
